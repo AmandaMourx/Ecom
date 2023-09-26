@@ -10,7 +10,7 @@ const createUser =  async(req, res) => {
     data, and one of the fields in that data is 
     the email address.*/
 
-    const findUser = await User.findOne(email);
+    const findUser = await User.findOne({email: email});
     /*This line attempts to find an existing user 
     in the database using the findOne method 
     provided by the User model. It searches for a 
@@ -19,7 +19,7 @@ const createUser =  async(req, res) => {
 
     if(!findUser){
         //Create new user
-        const newUser = User.create(req.body);
+        const newUser = await User.create(req.body);
         res.json(newUser);
         /*If no user with the same email is found 
         (if (!findUser)), it creates a new user 

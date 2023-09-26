@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const express = require('express'); 
 const dbConnect = require('./config/dbConnect');
 // importing the express.js package to our project
@@ -15,9 +16,8 @@ const PORT = process.env.PORT || 4000;
 const authRouter = require('./routes/authRoute');
 dbConnect();
 
-app.use("/", (req, res) => {
-    res.send("Hello from the server side");
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
 
 app.use('/api/user', authRouter); 
 //The first argument '/api/user' is a URL prefix. It means that any routes defined within authRouter will be relative to /api/user
