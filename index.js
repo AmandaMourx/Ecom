@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const express = require('express'); 
 const dbConnect = require('./config/dbConnect');
 // importing the express.js package to our project
@@ -13,15 +14,18 @@ const PORT = process.env.PORT || 4000;
 //This allows you to configure the port where your server will listen via environment variables
 
 const authRouter = require('./routes/authRoute');
+const { notFound, errorHandler } = require('./middlewares/errorHandler');
 dbConnect();
 
-app.use("/", (req, res) => {
-    res.send("Hello from the server side");
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
 
 app.use('/api/user', authRouter); 
 //The first argument '/api/user' is a URL prefix. It means that any routes defined within authRouter will be relative to /api/user
 //The second argument authRouter is the router instance that you imported earlier from ./routes/authRoute. This means that all the routes defined in authRouter will be available under the /api/user URL prefix.
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server is running at PORT ${PORT}`);
